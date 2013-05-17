@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="de">
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+  <title>Kalender: <%= controller.action_name %></title>
+
+  <%= stylesheet_link_tag 'kalender' %>
+	<%= stylesheet_link_tag 'jquery.ui.theme' %>
+	<%= stylesheet_link_tag 'jquery.ui.datepicker' %>
+	<%= stylesheet_link_tag 'timePicker' %>
+
+  <%= javascript_include_tag 'jquery-1.4.4.js' %>
+  <%= javascript_include_tag 'jquery.ui.core.js' %>
+  <%= javascript_include_tag 'jquery.ui.widget.js' %>
+  <%= javascript_include_tag 'jquery.ui.datepicker.js' %>
+  <%= javascript_include_tag 'jquery.ui.datepicker-de.js' %>
+  <%= javascript_include_tag 'jquery.timePicker.js' %>
+
+  <script>
+  
+    if( window.console == undefined )
+    {
+      window.console = {};
+      window.console.log = function( msg ) {};    
+    }
+  
+     <%= yield :js %>
+    
+  $(document).ready( function() {
+       
+     <%= yield :ready %>
+   
+   });
+  </script>
+
+</head>
+<body>
+
+<% if flash[:notice] %>
+  <p class="notice" style="color: green"><%= flash[:notice] %></p>
+<% elsif flash[:error] %>
+  <p class="error" style="color: red"><%= flash[:error] %></p>
+<% end %>
+
+
+
+<%= yield :layout %>
+
+</body>
+</html>

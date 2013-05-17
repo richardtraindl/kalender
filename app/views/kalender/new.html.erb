@@ -1,0 +1,123 @@
+﻿<% content_for :js do %>
+
+ var timep = new RegExp("\\b[012][0-9]:[0-5][0-9]\\b");
+ var datep = new RegExp("\\b[0123][0-9]\\.[01][0-9]\\.[0-9]{4}\\b");
+ 
+ function checkdate() 
+  {
+   if( timep.test($("#time_begin").val()) && datep.test($("#date_begin").val()) &&
+	   	 timep.test($("#time_end").val()) && datep.test($("#date_end").val()) ){
+	   	return true;
+   }
+ 		else{
+   		$( '#error' ).empty();
+      $( '#error' ).html( "Falsches Datumsformat: erwartet <i>hh:mm</i> <br> TT:MM:JJJJ z.B. 10:35 01.09.2011" );
+      return false;
+  	}
+  };
+
+
+<% end %>
+
+
+<% content_for :ready do %>
+
+
+$("#time_begin").timePicker({
+  	startTime: "00:00",
+  	endTime: "23:45",
+  	show24Hours: true,
+  	separator: ':',
+  	step: 15});
+
+$("#time_end").timePicker({
+  	startTime: "00:00",
+  	endTime: "23:45",
+  	show24Hours: true,
+  	separator: ':',
+  	step: 15});
+
+	$(function() {
+		$.datepicker.setDefaults($.datepicker.regional['']);
+		$( "#date_begin" ).datepicker( $.datepicker.regional['de'] ); 
+		$( "#date_begin" ).datepicker({ nextText: 'Later' });
+	});
+
+	$(function() {
+		$.datepicker.setDefaults($.datepicker.regional['']);
+		$( "#date_end" ).datepicker( $.datepicker.regional['de'] ); 
+		$( "#date_end" ).datepicker({ nextText: 'Later' });
+	});
+
+
+
+<% end %>
+
+
+<div id='error' style='color: red; border: 2 solid red;'></div>
+
+
+<h1>Termin</h1>
+
+
+
+
+
+<% form_for @termin, :url => { :action => :create } do |termin| %>
+	<table>
+		<tr>
+			<td>
+				<label>Autor:</label>
+			</td>
+			<td>
+				<%= termin.select :autor, options_for_select( KalenderController::AUTOREN, "Gerold" ) %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Thema:</label>
+			</td>
+			<td>
+				<%= termin.text_field :thema, :value => @termin.thema, :size => 50 %>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label>Zeit:</label>
+			</td>
+			<td>
+				<table class="blank">
+					<tr>
+						<td class="blank">
+							<label>Beginn</label>
+						</td>
+						<td class="blank">
+							<%= termin.text_field :time_begin, :id => "time_begin", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
+							<%= termin.text_field :date_begin, :id => "date_begin", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
+
+							<!-- %= time_select :termin, :beginn, :default => @termin.beginn, :minute_step => 15 % -->
+							<!-- label --> <!-- am --> <!-- /label -->
+							<!-- %= date_select :termin, :beginn, :default => @termin.beginn, :order => [:day, :month, :year] % -->
+						</td>
+					</tr>
+					<tr>
+						<td class="blank">
+							<label>Ende</label>
+						</td>
+						<td class="blank">
+							<%= termin.text_field :time_end, :id => "time_end", :value => (@termin.beginn + 15.minutes).strftime("%H:%M"), :size => 5 %>
+							<%= termin.text_field :date_end, :id => "date_end", :value => (@termin.beginn + 15.minutes).strftime("%d.%m.%Y"), :size => 10 %>
+							
+							<!-- %= time_select :termin, :ende, :default => @termin.ende, :minute_step => 15 % -->
+							<!-- label -- > <!-- am --> <!-- /label -->
+							<!-- %= date_select :termin, :ende, :default => @termin.ende, :order => [:day, :month, :year] % -->
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>	
+
+	<p><!-- %= submit_tag("sichern") % -->  <%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>   <%= link_to 'abbrechen', :action => 'index', :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day %></p>
+<% end %>
+
