@@ -1,352 +1,342 @@
 <% content_for :js do %>
 
-var zindexmax = 9;
+	var zindexmax = 9;
 
-function platziere_termine(){
+	function platziere_termine(){
 
-	var dwtagvor = -1;
-	var schedule = [(24*4)]; // [(24*2)]
+		var dwtagvor = -1;
+		var schedule = [(24*4)]; // [(24*2)]
 
+		$( 'div.termin' ).each( function(){
 
-	$( 'div.termin' ).each( function(){
+			var dautor = $(this).attr( "data-autor");
+			var dwtag = $(this).attr( "data-wtag");
+			var dstunde = $(this).attr( "data-stunde");
+			var dviertel = $(this).attr( "data-viertel");
+			var ddauer_viertel = $(this).attr( "data-dauer_viertel");
 
+			var vwidth = 100;
+			var vheight = 10;
+			var vtop = -1;
+			var border = 0;
+			var borderheight = 0;
+			var vstageleft = 1;
 
-	var dautor = $(this).attr( "data-autor");
-	var dwtag = $(this).attr( "data-wtag");
-	var dstunde = $(this).attr( "data-stunde");
-	var dviertel = $(this).attr( "data-viertel");
-	var ddauer_viertel = $(this).attr( "data-dauer_viertel");
+			// farbe für autoren setzen
+			if( dautor == "Elfi"){
+				var bg = "#BBE4F3";
+			}
 
-	var vwidth = 100;
-	var vheight = 10;
-	var vtop = -1;
-	var border = 0;
-	var borderheight = 0;
-	var vstageleft = 1;
+			if( dautor == "Ordi" || dautor == "Gerold" ){
+				var bg = "#FBFBB1";
+			}
 
-	// farbe für autoren setzen
-	if( dautor == "Elfi"){
-		var bg = "#BBE4F3";
+			if( dautor == "TP"){
+				var bg = "#EDA9D5";
+				vwidth = 30;
+			}
+
+			// 1) clear schedule wenn neuer tag: alle viertel stunden auf null setzen
+			if( dwtag != dwtagvor){
+				for( var i = (7 * 4); i < (24 * 4); i++ ){
+					schedule[i] = [15];
+					schedule[i][0] = 0;
+					schedule[i][1] = 0;
+					schedule[i][2] = 0;
+					schedule[i][3] = 0;
+					schedule[i][4] = 0;
+					schedule[i][5] = 0;
+					schedule[i][6] = 0;
+					schedule[i][7] = 0;
+					schedule[i][8] = 0;
+					schedule[i][9] = 0;
+					schedule[i][10] = 0;
+					schedule[i][11] = 0;
+					schedule[i][12] = 0;
+					schedule[i][13] = 0;
+					schedule[i][14] = 0;
+				}
+			}
+
+			// 2) strutur befuellen (pro viertel stunden)
+			var startzeit = Number(dstunde) * 4 + Number(dviertel);
+			var endzeit = startzeit + Number(ddauer_viertel);
+			var index = 0;
+			for( var j = 0; j < 15; j++ ){
+				if(schedule[startzeit][j] == 0){
+					index = j;
+					break;
+				}
+			}
+			for( var i = startzeit; i < endzeit; i++ ){
+				schedule[i][index] = 1;
+			}
+
+			var caltdid = '#c' + dwtag + "_" + dstunde;
+
+			console.log( "caltdid=" + caltdid );
+
+			var caltd = $( caltdid );
+
+			var px_pro_viertelstunde = 16 // caltd.height() / 4 + 0; // + 2
+
+			dwtagvor = dwtag;
+			dstundevor = dstunde;
+			ddauervor = ddauer_viertel;
+
+			// position (top und left) setzen
+			if(index < 5){
+				vstageleft = index;
+			}
+			if(index > 4 && index < 10){
+				vtop = 19;
+				vstageleft = (index - 5);
+			}
+			if(index > 9 && index < 15){
+				vtop = 39;
+				vstageleft = (index - 10);
+			}
+
+			// height setzen
+			if( dautor == "TP"){
+				vheight = 20;
+			}
+			else{
+				vheight = (px_pro_viertelstunde * Number(ddauer_viertel));
+			}
+
+			border = Number(dviertel) / 4;
+
+			borderheight = Number(dviertel) / 4;
+
+			var cssprops = {
+				'background' : bg,
+				'border' : '1px solid black',
+				'position' : 'absolute',
+				'width' : vwidth + 'px',
+				'height' : vheight + 'px', // + borderheight
+				'top' : (caltd.offset().top + 68 / 4 * Number(dviertel) + vtop) + 'px', // + border
+				'left' : (caltd.offset().left + 36 + 20 * vstageleft) + 'px',
+				'overflow' : 'hidden'
+			}
+
+			$(this).css( cssprops );
+
+		});
 	}
-
-	if( dautor == "Ordi" || dautor == "Gerold" ){
-		var bg = "#FBFBB1";
-	}
-
-	if( dautor == "TP"){
-		var bg = "#EDA9D5";
-		vwidth = 30;
-	}
-
-	// 1) clear schedule wenn neuer tag: alle viertel stunden auf null setzen
-	if( dwtag != dwtagvor){
-		for( var i = (7 * 4); i < (24 * 4); i++ ){
-			schedule[i] = [15];
-			schedule[i][0] = 0;
-			schedule[i][1] = 0;
-			schedule[i][2] = 0;
-			schedule[i][3] = 0;
-			schedule[i][4] = 0;
-			schedule[i][5] = 0;
-			schedule[i][6] = 0;
-			schedule[i][7] = 0;
-			schedule[i][8] = 0;
-			schedule[i][9] = 0;
-			schedule[i][10] = 0;
-			schedule[i][11] = 0;
-			schedule[i][12] = 0;
-			schedule[i][13] = 0;
-			schedule[i][14] = 0;
-		}
-	}
-
-	// 2) strutur befuellen (pro viertel stunden)
-	var startzeit = Number(dstunde) * 4 + Number(dviertel);
-	var endzeit = startzeit + Number(ddauer_viertel);
-	var index = 0;
-	for( var j = 0; j < 15; j++ ){
-		if(schedule[startzeit][j] == 0){
-			index = j;
-			break;
-		}
-	}
-	for( var i = startzeit; i < endzeit; i++ ){
-		schedule[i][index] = 1;
-	}
-
-	var caltdid = '#c' + dwtag + "_" + dstunde;
-
-	console.log( "caltdid=" + caltdid );
-
-	var caltd = $( caltdid );
-
-	var px_pro_viertelstunde = 16 // caltd.height() / 4 + 0; // + 2
-
-	dwtagvor = dwtag;
-	dstundevor = dstunde;
-	ddauervor = ddauer_viertel;
-
-
-	// position (top und left) setzen
-	if(index < 5){
-		vstageleft = index;
-	}
-	if(index > 4 && index < 10){
-		vtop = 19;
-		vstageleft = (index - 5);
-	}
-	if(index > 9 && index < 15){
-		vtop = 39;
-		vstageleft = (index - 10);
-	}
-
-	// height setzen
-	if( dautor == "TP"){
-		vheight = 20;
-	}
-	else{
-		vheight = (px_pro_viertelstunde * Number(ddauer_viertel));
-	}
-
-	border = Number(dviertel) / 4;
-
-	borderheight = Number(dviertel) / 4;
-
-	var cssprops = {
-		'background' : bg,
-		'border' : '1px solid black',
-		'position' : 'absolute',
-		'width' : vwidth + 'px',
-		'height' : vheight + 'px',  //  + borderheight
-		'top' : (caltd.offset().top + 68 / 4 * Number(dviertel) + vtop) + 'px', // + border
-		'left' : (caltd.offset().left + 36 + 20 * vstageleft) + 'px',
-		'overflow' : 'hidden'
-	}
-
-	$(this).css( cssprops );
-
-	// $(this).click( function(){
-	// zindexmax += 1;
-
-	// console.log( "zindexmax:" + zindexmax );
-
-	// $(this).css( "z-index", zindexmax );
-	// });
-
-	});
-}
 
 <% end %>
 
 
 <% content_for :ready do %>
 
-platziere_termine();
+	platziere_termine();
 
-$(window).resize( platziere_termine );
+	$(window).resize( platziere_termine );
 
-<% end %>
-
-
-<table class="blank" style="width:100%">
-<colgroup>
-<col />
-<col />
-<col />
-<col />
-<col width="60%" />
-</colgroup>
-<tr>
-<td class="blank">
-<% form_tag(:action => "index") do %>
-<label>Jahr:</label>
-<%= select_tag(:Jahr,
-options_for_select(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"], @kaldatum.year.to_s), :onchange => 'this.form.submit()' ) %>
-<label> Monat:</label>
-<%= select_tag(:Monat,
-options_for_select(@monate, @kaldatum.month.to_s), :onchange => 'this.form.submit()' ) %>
-<%= text_field_tag(:Tag, @kaldatum.day.to_i, :size => 1, :type => "hidden") %>
-<% end %>
-</td>
-<td class="blank">
-KW: <%= @kaldatum.strftime("%W") %>
-</td>
-<td class="blank">
-<% form_tag(:action => "index") do %>
-<%= text_field_tag(:KWvor, @kaldatum.to_i, :size => 1, :type => "hidden") %>
-<%= submit_tag("+") %>
-<% end %>
-</td>
-<td class="blank">
-<% form_tag(:action => "index") do %>
-<%= text_field_tag(:KWzurueck, @kaldatum.to_i, :size => 1, :type => "hidden") %>
-<%= submit_tag("-") %>
-<% end %>
-</td>
-<td class="blank">
-<h2 class="header"><a style="color:red" href="kalender">Tagesdatum:
-<% if @aktzeit.day < 10 %>
-<%= "0" + @aktzeit.day.to_s %>.
-<% else %>
-<%= @aktzeit.day %>.
-<% end %>
-<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= @aktzeit.strftime("%W") %></a>
-</h2>
-</td>
-</tr>
-</table>
-
-<table style="width:100%" id="cal">
-<colgroup>
-<col width="14%" />
-<col width="14%" />
-<col width="14%" />
-<col width="14%" />
-<col width="14%" />
-<col width="14%" />
-<col width="14%" />
-</colgroup>
-<tr>
-<% 0.upto(6) do |tag| %>
-<% @ktagdatum = @kaldatum + tag * @sek_pro_tag %>
-<% if @ktagdatum == @aktdatum %>
-<td class="header2">
-<% else %>
-<td class="header1">
-<% end %>
-<% @ja,@bez = gibFeiertag(@kaldatum + tag * @sek_pro_tag) %>
-<% if @ja || tag == 6 %>
-<span class="feiertag">
-<% end %>
-<%= "<span style=\"font-size:24px\">" + (@kaldatum + tag * @sek_pro_tag).strftime("%d") + "</span>" %>
-
-<%= @wochentage[tag] %>
-<!-- %= link_to @wochentage[tag] + ", " + (@kaldatum + tag * @sek_pro_tag).strftime("%d"), :action => 'new', :kaldatum => (@kaldatum + tag * @sek_pro_tag).to_i % -->
-<% if @ja %>
-<%= "<span style=\"font-size:10px\">(" + @bez + ")</span>"%>
 <% end %>
 
-<% if @ja || tag == 6 %>
-</span>
-<% end %>
-</td>
-<% end %>
-</tr>
 
-<% 7.upto(23) do |std| %>
-<% @kstunde = std * @sek_pro_stunde %>
+	<table class="blank" style="width:100%">
+		<colgroup>
+			<col>
+			<col>
+			<col>
+			<col>
+			<col width="60%">
+		</colgroup>
+		<tr>
+			<td class="blank">
+				<% form_tag(:action => "index") do %>
+					<label>Jahr:</label>
+					<%= select_tag(:Jahr, options_for_select(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"], @kaldatum.year.to_s), :onchange => 'this.form.submit()' ) %>
+					<label> Monat:</label>
+					<%= select_tag(:Monat,
+					options_for_select(@monate, @kaldatum.month.to_s), :onchange => 'this.form.submit()' ) %>
+					<%= text_field_tag(:Tag, @kaldatum.day.to_i, :size => 1, :type => "hidden") %>
+				<% end %>
+			</td>
+			<td class="blank">
+				KW: <%= @kaldatum.strftime("%W") %>
+			</td>
+			<td class="blank">
+				<% form_tag(:action => "index") do %>
+					<%= text_field_tag(:KWvor, @kaldatum.to_i, :size => 1, :type => "hidden") %>
+					<%= submit_tag("+") %>
+				<% end %>
+			</td>
+			<td class="blank">
+				<% form_tag(:action => "index") do %>
+					<%= text_field_tag(:KWzurueck, @kaldatum.to_i, :size => 1, :type => "hidden") %>
+					<%= submit_tag("-") %>
+				<% end %>
+			</td>
+			<td class="blank">
+				<h2 class="header"><a style="color:red" href="kalender">Tagesdatum:
+					<% if @aktzeit.day < 10 %>
+						<%= "0" + @aktzeit.day.to_s %>.
+					<% else %>
+						<%= @aktzeit.day %>.
+					<% end %>
+					<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= @aktzeit.strftime("%W") %></a>
+				</h2>
+			</td>
+		</tr>
+	</table>
 
-<% if std == 22 %>
-<tr style="height:60px">
-<% else %>
-<tr class="woche">
-<% end %>
+	<table style="width:100%" id="cal">
+		<colgroup>
+			<col width="14%">
+			<col width="14%">
+			<col width="14%">
+			<col width="14%">
+			<col width="14%">
+			<col width="14%">
+			<col width="14%">
+		</colgroup>
+		<tr>
+			<% 0.upto(6) do |tag| %>
+				<% @ktagdatum = @kaldatum + tag * @sek_pro_tag %>
+				<% if @ktagdatum == @aktdatum %>
+					<td class="header2">
+				<% else %>
+					<td class="header1">
+				<% end %>
 
-<% 0.upto(6) do |tag| %>
-<% @ktagdatum = @kaldatum + tag * @sek_pro_tag %>
-<% if (tag == 1 || tag == 2 || tag == 3) && std == 18 %>
-<% @klasse = "stunde2" %>
-<% else %>
-<% @klasse = "stunde1" %>
-<% end %>
-<%= "<td id='c#{tag}_#{std}'>" %>
-<table class="inner">
-<tr>
-<td class="inner">
-<%= link_to (@ktagdatum + @kstunde).strftime("%H:00"), { :action => "new", :beginn => (@ktagdatum + @kstunde).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * 60 }, :class => @klasse %>
-<% @klasse = "stunde1" %>
-</td>
-</tr>
-<tr>
-<td class="inner">
-<% if std >= 14 && std <= 19 %>
-<%= link_to (@ktagdatum + @kstunde).strftime("%H:15"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 15).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 15)}, :class => @klasse %>
-<% else %>
-<span style="font-size:12px;">&nbsp;</span>
-<% end %>
-</td>
-</tr>
-<tr>
-<td class="inner">
-<% if std >= 14 && std <= 19 %>
-<%= link_to (@ktagdatum + @kstunde).strftime("%H:30"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 30).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 30)}, :class => @klasse %>
-<% else %>
-<span style="font-size:12px;">&nbsp;</span>
-<% end %>
-</td>
-</tr>
-<tr>
-<td class="inner">
-<% if std >= 14 && std <= 19 %>
-<%= link_to (@ktagdatum + @kstunde).strftime("%H:45"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 45).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 45)}, :class => @klasse %>
-<% else %>
-<span style="font-size:12px;">&nbsp;</span>
-<% end %>
-</td>
-</tr>
-</table>
-</td>
-<% end %>
-</tr>
-<% end %>
-</table>
+					<% @ja,@bez = gibFeiertag(@kaldatum + tag * @sek_pro_tag) %>
+					<% if @ja || tag == 6 %>
+						<span class="feiertag">
+					<% end %>
+					<%= "<span style=\"font-size:24px\">" + (@kaldatum + tag * @sek_pro_tag).strftime("%d") + "</span>" %>
+
+					<%= @wochentage[tag] %>
+					<% if @ja %>
+						<%= "<span style=\"font-size:10px\">(" + @bez + ")</span>"%>
+					<% end %>
+
+					<% if @ja || tag == 6 %>
+						</span>
+					<% end %>
+				</td>
+			<% end %>
+		</tr>
+
+		<% 7.upto(23) do |std| %>
+			<% @kstunde = std * @sek_pro_stunde %>
+
+			<% if std == 22 %>
+				<tr style="height:60px">
+			<% else %>
+				<tr class="woche">
+			<% end %>
+
+			<% 0.upto(6) do |tag| %>
+				<% @ktagdatum = @kaldatum + tag * @sek_pro_tag %>
+				
+				<% if (tag == 1 || tag == 2 || tag == 3) && std == 18 %>
+					<% @klasse = "stunde2" %>
+				<% else %>
+					<% @klasse = "stunde1" %>
+				<% end %>
+		
+				<%= "<td id='c#{tag}_#{std}'>" %>
+					<table class="inner">
+						<tr>
+							<td class="inner">
+								<%= link_to (@ktagdatum + @kstunde).strftime("%H:00"), { :action => "new", :beginn => (@ktagdatum + @kstunde).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * 60 }, :class => @klasse %>
+								<% @klasse = "stunde1" %>
+							</td>
+						</tr>
+						<tr>
+							<td class="inner">
+								<% if std >= 14 && std <= 19 %>
+									<%= link_to (@ktagdatum + @kstunde).strftime("%H:15"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 15).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 15)}, :class => @klasse %>
+								<% else %>
+									<span style="font-size:12px;">&nbsp;</span>
+								<% end %>
+							</td>
+						</tr>
+						<tr>
+							<td class="inner">
+								<% if std >= 14 && std <= 19 %>
+									<%= link_to (@ktagdatum + @kstunde).strftime("%H:30"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 30).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 30)}, :class => @klasse %>
+								<% else %>
+									<span style="font-size:12px;">&nbsp;</span>
+								<% end %>
+							</td>
+						</tr>
+						<tr>
+							<td class="inner">
+								<% if std >= 14 && std <= 19 %>
+									<%= link_to (@ktagdatum + @kstunde).strftime("%H:45"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 45).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 45)}, :class => @klasse %>
+								<% else %>
+									<span style="font-size:12px;">&nbsp;</span>
+								<% end %>
+							</td>
+						</tr>
+					</table>
+				</td>
+				<% end %>
+			</tr>
+		<% end %>
+	</table>
 
 
 <!-- Für jeden Termin und Wochentag einen DIV Block schreiben -->
 <% 0.upto(6) do |tag| %>
-<% @termine[tag].each do |t| %>
-	<% @ugrenze = @kaldatum + tag * @sek_pro_tag %>
-	<% @mgrenze = @ugrenze + 7 * @sek_pro_stunde %>
-	<% @ogrenze = @ugrenze + 24 * @sek_pro_stunde %>
+	<% @termine[tag].each do |t| %>
+		<% @ugrenze = @kaldatum + tag * @sek_pro_tag %>
+		<% @mgrenze = @ugrenze + 7 * @sek_pro_stunde %>
+		<% @ogrenze = @ugrenze + 24 * @sek_pro_stunde %>
 
-	<!-- Für Autor "TP" Termine zwischen 21:00 und 23:00 zu setzen -->
-	<% if t.autor == "TP" %>
-		<% @tag = @ugrenze.wday_de %>
-		<% @viertel = 0 %>
-		<% @dauer_viertel = 1 %>
-		<% if t.beginn.to_datetime.jd == @ugrenze.to_datetime.jd ||
-		(t.beginn.to_datetime.jd == @ugrenze.to_datetime.jd && t.ende.to_datetime.jd == @ugrenze.to_datetime.jd) %>
-			<% @stunde = 21 %>
-		<% elsif t.ende.to_datetime.jd == @ugrenze.to_datetime.jd %>
-			<% @stunde = 23 %>
-		<% else %>
-			<% @stunde = 22 %>
-		<% end %>
-	<!-- Für andere Autoren Termine setzen -->
-	<% else %>
-		<% t.beginn < @mgrenze ? @beginn = @mgrenze : @beginn = t.beginn %>
-		<% @tag = @beginn.wday_de %>
-		<% @stunde = @beginn.hour %>
-		<% @viertel = @beginn.min / 15 %>
-		<% if t.ende.to_datetime.jd < @ogrenze.to_datetime.jd %>
-			<% @dauer_viertel = ((t.ende - @beginn) + 0) / (15 * 60) %>
-		<% else %>
-			<% if @ogrenze > @beginn %>
-				<% @dauer_viertel = 4 %>
+		<!-- Für Autor "TP" Termine zwischen 21:00 und 23:00 zu setzen -->
+		<% if t.autor == "TP" %>
+			<% @tag = @ugrenze.wday_de %>
+			<% @viertel = 0 %>
+			<% @dauer_viertel = 1 %>
+			<% if t.beginn.to_datetime.jd == @ugrenze.to_datetime.jd ||
+			(t.beginn.to_datetime.jd == @ugrenze.to_datetime.jd && t.ende.to_datetime.jd == @ugrenze.to_datetime.jd) %>
+				<% @stunde = 21 %>
+			<% elsif t.ende.to_datetime.jd == @ugrenze.to_datetime.jd %>
+				<% @stunde = 23 %>
 			<% else %>
-				<% @dauer_viertel = ((@ogrenze - @beginn) + 0) / (15 * 60) %>
+				<% @stunde = 22 %>
+			<% end %>
+		<!-- Für andere Autoren Termine setzen -->
+		<% else %>
+			<% t.beginn < @mgrenze ? @beginn = @mgrenze : @beginn = t.beginn %>
+			<% @tag = @beginn.wday_de %>
+			<% @stunde = @beginn.hour %>
+			<% @viertel = @beginn.min / 15 %>
+			<% if t.ende.to_datetime.jd < @ogrenze.to_datetime.jd %>
+				<% @dauer_viertel = ((t.ende - @beginn) + 0) / (15 * 60) %>
+			<% else %>
+				<% if @ogrenze > @beginn %>
+					<% @dauer_viertel = 4 %>
+				<% else %>
+					<% @dauer_viertel = ((@ogrenze - @beginn) + 0) / (15 * 60) %>
+				<% end %>
+			<% end %>
+			<% if @dauer_viertel < 1 %>
+				<% @dauer_viertel = 1 %>
 			<% end %>
 		<% end %>
-		<% if @dauer_viertel < 1 %>
-			<% @dauer_viertel = 1 %>
-		<% end %>
-	<% end %>
 
-	<%= "<div class=\"termin\" data-autor='#{t.autor}' data-wtag='#{@tag}'" %>
-		<% if t.beginn.to_datetime.jd < t.ende.to_datetime.jd && t.beginn.to_datetime.jd != @ugrenze.to_datetime.jd && t.autor != "TP" %>
-			<%= " data-stunde='7' data-viertel='0' data-dauer_viertel='3'>" %>
-			<p class="termin"><%= t.beginn.strftime("%d.%m %H:%M") %><br /><%= t.ende.strftime("%d.%m %H:%M") %></p>
-		<% else %>
-			<%= " data-stunde='#{@stunde}' data-viertel='#{@viertel}' data-dauer_viertel='#{@dauer_viertel}'>" %>
-		<% end %>
-	
-		<% if t.autor == "TP" %>
-			<%= link_to t.thema, { :action => "edit", :id => t.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day}, 
-						{ :title => t.beginn.strftime("%d.%m.") + "-" + t.ende.strftime("%d.%m.") + ' ' + t.thema}, :class => "termin" %>
-		<% else %>
-			<%= link_to t.thema, { :action => "edit", :id => t.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day}, 
-						{ :title => t.beginn.strftime("%H:%M") + "-" + t.ende.strftime("%H:%M") + ' ' + t.thema}, :class => "termin" %>
-		<% end %>
-	</div>
-<% end %>
+		<%= "<div class=\"termin\" data-autor='#{t.autor}' data-wtag='#{@tag}'" %>
+			<% if t.beginn.to_datetime.jd < t.ende.to_datetime.jd && t.beginn.to_datetime.jd != @ugrenze.to_datetime.jd && t.autor != "TP" %>
+				<%= " data-stunde='7' data-viertel='0' data-dauer_viertel='3'>" %>
+				<p class="termin"><%= t.beginn.strftime("%d.%m %H:%M") %><br /><%= t.ende.strftime("%d.%m %H:%M") %></p>
+			<% else %>
+				<%= " data-stunde='#{@stunde}' data-viertel='#{@viertel}' data-dauer_viertel='#{@dauer_viertel}'>" %>
+			<% end %>
+		
+			<% if t.autor == "TP" %>
+				<%= link_to t.thema, { :action => "edit", :id => t.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day}, 
+							{ :title => t.beginn.strftime("%d.%m.") + "-" + t.ende.strftime("%d.%m.") + ' ' + t.thema}, :class => "termin" %>
+			<% else %>
+				<%= link_to t.thema, { :action => "edit", :id => t.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day}, 
+							{ :title => t.beginn.strftime("%H:%M") + "-" + t.ende.strftime("%H:%M") + ' ' + t.thema}, :class => "termin" %>
+			<% end %>
+		</div>
+	<% end %>
 <% end %>

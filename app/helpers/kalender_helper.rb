@@ -61,6 +61,8 @@ module KalenderHelper
 		datum = Time.local(tagesdatum.year, tagesdatum.month, tagesdatum.day,0,0,0)
 		if datum.month == 1 && datum.day == 1
 			return true,"Neujahr"
+		elsif datum.month == 1 && datum.day == 6
+			return true,"Heilige Drei Könige"
 		elsif datum.month == 5 && datum.day == 1
 			return true,"Staatsfeiertag"
 		elsif datum.month == 8 && datum.day == 15
@@ -78,17 +80,15 @@ module KalenderHelper
 		end
 		
 		@ostern = berechneOstern(datum.year)
-		if @ostern == datum
+		if datum == @ostern
 			return true,"Ostern"
-		elsif @ostern + @sek_pro_tag == datum
-			return true,"Ostern"
-		elsif @ostern + (@sek_pro_tag * 39) == datum
+		elsif datum == @ostern + 39
 			return true,"Christi Himmelfahrt"
-		elsif @ostern + (@sek_pro_tag * 49) == datum
+		elsif datum == @ostern + 49
 			return true,"Pfingsten"
-		elsif @ostern + (@sek_pro_tag * 50) == datum
+		elsif datum == @ostern + 50
 			return true,"Pfingsten"
-		elsif @ostern + (@sek_pro_tag * 60) == datum
+		elsif datum == @ostern + 60
 			return true,"Fronleichnam"
 		end
 		
