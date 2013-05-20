@@ -80,15 +80,15 @@ module KalenderHelper
 		@ostern = berechneOstern(datum.year)
 		if @ostern == datum
 			return true,"Ostern"
-		elsif @ostern + @sek_pro_tag == datum
+		elsif @ostern + 1.day == datum
 			return true,"Ostern"
-		elsif @ostern + (@sek_pro_tag * 39) == datum
+		elsif @ostern + 39.days == datum
 			return true,"Christi Himmelfahrt"
-		elsif @ostern + (@sek_pro_tag * 49) == datum
+		elsif @ostern + 49.days == datum
 			return true,"Pfingsten"
-		elsif @ostern + (@sek_pro_tag * 50) == datum
+		elsif @ostern + 50.days == datum
 			return true,"Pfingsten"
-		elsif @ostern + (@sek_pro_tag * 60) == datum
+		elsif @ostern + 60.days == datum
 			return true,"Fronleichnam"
 		end
 		
