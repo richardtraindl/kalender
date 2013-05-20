@@ -1,4 +1,4 @@
-require 'pp'
+﻿require 'pp'
 
 class Time
 
@@ -12,7 +12,7 @@ end
 
 class KalenderController < ApplicationController
     
-  AUTOREN = [ "Ordi", "Elfi", "TP" ]
+  AUTOREN = [ "Elfi", "Ordi", "TP" ]  
 	SEK_PRO_TAG = (60 * 60 * 24)
 	SEK_PRO_STUNDE = (60 * 60)
 		
@@ -35,39 +35,47 @@ class KalenderController < ApplicationController
 			@kaldatum = @aktdatum - (@aktdatum.wday - 1) * SEK_PRO_TAG
 		end
 		
-		if !params[:Jahr].blank? && !params[:Monat].blank? && !params[:Tag].blank?
-			@jahr = params[:Jahr]
-			@monat = params[:Monat]
-			@tag = params[:Tag]
-
-			if @monat == 2 && @tag > 29
-				@tag = 29
-			end
-			begin
-				@kaldatum = Time.gm(@jahr, @monat, @tag, 0, 0, 0, 0)
-				
-				rescue ArgumentError
-				@tag = @tag - 1
-				@kaldatum = Time.gm(@jahr, @monat, @tag, 0, 0, 0, 0)
-			end
-			
-			if @kaldatum.wday == 0
-				@kaldatum = @kaldatum - 6 * SEK_PRO_TAG
-			else
-				@kaldatum = @kaldatum - (@kaldatum.wday - 1) * SEK_PRO_TAG
-			end
-		end
-
-		if !params[:KWadjust].blank?
-			@adjust = params[:KWadjust]
-			if @adjust == "1"
-				@kaldatum = @kaldatum + SEK_PRO_TAG * 7
-			elsif @adjust == "-1"
-				@kaldatum = @kaldatum - SEK_PRO_TAG * 7	
-			end
-		end
+		# if request.post?
+			if !params[:Jahr].blank? && !params[:Monat].blank? && !params[:Tag].blank?
+				@jahr = params[:Jahr]
+				@monat = params[:Monat]
+				@tag = params[:Tag]
 	
-		@termine = Termin.find_neu( @kaldatum, (@kaldatum + 7 * SEK_PRO_TAG) )   
+				if @monat == 2 && @tag > 29
+					@tag = 29
+				end
+				begin
+					@kaldatum = Time.gm(@jahr, @monat, @tag, 0, 0, 0, 0)
+					
+					rescue ArgumentError
+					@tag = @tag - 1
+					@kaldatum = Time.gm(@jahr, @monat, @tag, 0, 0, 0, 0)
+				end
+				
+				if @kaldatum.wday == 0
+					@kaldatum = @kaldatum - 6 * SEK_PRO_TAG
+				else
+					@kaldatum = @kaldatum - (@kaldatum.wday - 1) * SEK_PRO_TAG
+				end
+			end
+
+			if !params[:KWvor].blank?
+				@kaldatum = Time.at(Integer(params[:KWvor]))
+				@kaldatum = @kaldatum.gmtime
+				if @kaldatum + SEK_PRO_TAG * 7 < @maxkaldatum
+					@kaldatum = @kaldatum + SEK_PRO_TAG * 7
+				end
+			end
+			if !params[:KWzurueck].blank?
+				@kaldatum = Time.at(Integer(params[:KWzurueck]))
+				@kaldatum = @kaldatum.gmtime
+				if @kaldatum - SEK_PRO_TAG * 7 > @minkaldatum
+					@kaldatum = @kaldatum - SEK_PRO_TAG * 7
+				end
+			end
+		# end
+
+  @termine = Termin.find_neu( @kaldatum, (@kaldatum + 7 * SEK_PRO_TAG) )   
   end
 
 
@@ -93,23 +101,8 @@ class KalenderController < ApplicationController
 		@termin 			 = Termin.new
 	  @termin.autor  = params[:termin][:autor]
 	  @termin.thema  = params[:termin][:thema]
-		@termin.beginn = Time.gm(
-												(params[:termin][:date_begin].to_s[6,4]).to_i,
-												(params[:termin][:date_begin].to_s[3,2]).to_i,
-												(params[:termin][:date_begin].to_s[0,2]).to_i, 
-												(params[:termin][:time_begin].to_s[0,2]).to_i, 
-												(params[:termin][:time_begin].to_s[3,2]).to_i,
-												0, 0)
-		@termin.ende = Time.gm(
-												(params[:termin][:date_end].to_s[6,4]).to_i,
-												(params[:termin][:date_end].to_s[3,2]).to_i,
-												(params[:termin][:date_end].to_s[0,2]).to_i,
-												(params[:termin][:time_end].to_s[0,2]).to_i,
-												(params[:termin][:time_end].to_s[3,2]).to_i,
-												0, 0)
-	  
-	  # @termin.beginn = build_datetime_from_params( params[:termin], "beginn" )
-		# @termin.ende   = build_datetime_from_params( params[:termin], "ende" )
+	  @termin.beginn = build_datetime_from_params( params[:termin], "beginn" )
+		@termin.ende   = build_datetime_from_params( params[:termin], "ende" )
 		
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt vor Beginn.'
@@ -136,27 +129,11 @@ class KalenderController < ApplicationController
 
 
   def update
-		@kaldatum = Time.gm(params[:kjahr].to_i, params[:kmonat].to_i, params[:ktag].to_i)
-
     @termin = Termin.find(params[:id])
     @termin.autor = params[:termin][:autor]
     @termin.thema = params[:termin][:thema]
-    # @termin.beginn = build_datetime_from_params( params[:termin], "beginn" )
-		# @termin.ende   = build_datetime_from_params( params[:termin], "ende" )
-		@termin.beginn = Time.gm(
-												(params[:termin][:date_begin].to_s[6,4]).to_i,
-												(params[:termin][:date_begin].to_s[3,2]).to_i,
-												(params[:termin][:date_begin].to_s[0,2]).to_i, 
-												(params[:termin][:time_begin].to_s[0,2]).to_i, 
-												(params[:termin][:time_begin].to_s[3,2]).to_i,
-												0, 0)
-		@termin.ende = Time.gm(
-												(params[:termin][:date_end].to_s[6,4]).to_i,
-												(params[:termin][:date_end].to_s[3,2]).to_i,
-												(params[:termin][:date_end].to_s[0,2]).to_i,
-												(params[:termin][:time_end].to_s[0,2]).to_i,
-												(params[:termin][:time_end].to_s[3,2]).to_i,
-												0, 0)
+    @termin.beginn = build_datetime_from_params( params[:termin], "beginn" )
+		@termin.ende   = build_datetime_from_params( params[:termin], "ende" )
 
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt Beginn.'
