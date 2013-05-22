@@ -13,7 +13,8 @@ td.header1 { height:50px; vertical-align:middle; background-color:#E0E0E0 }
 td.header2 { height:50px; vertical-align:middle; background-color:#80A0E0 }
 td.markiert { background-color:#F4E8E8 }
 td.termin { max-height:40px }
-td.inner { border:0px; padding:0 0 0 0; height:15px }
+div.inner { border:0px; padding:0 0 0 0; height:15px }
+div.edit-termin { border:1px solid #111111; border-spacing:0px }
 a:link, :visited, :active, :focus, :hover { text-decoration:none; color:black }
 a.stunde1 { font-size:12px; text-decoration:none; color:black }
 a.stunde2 { font-size:12px; text-decoration:none; color:#2948D3; font-weight:bold }

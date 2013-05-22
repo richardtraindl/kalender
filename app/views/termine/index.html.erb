@@ -238,41 +238,41 @@
 						<% end %>
 				
 							<%= "<td id='c#{tag}_#{std}'>".html_safe %>
-								<table class="inner">
-									<tr>
-										<td class="inner">
+								<div class="div-table">
+									<div class="div-row">
+										<div class="div-cell inner">
 											<%= link_to (@ktagdatum + @kstunde).strftime("%H:00"), { :action => "new", :beginn => (@ktagdatum + @kstunde).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * 60 }, :class => @klasse %>
 											<% @klasse = "stunde1" %>
-										</td>
-									</tr>
-									<tr>
-										<td class="inner">
+										</div>
+									</div>
+									<div class="div-row">
+										<div class="div-cell inner">
 											<% if std >= 14 && std <= 19 %>
 												<%= link_to (@ktagdatum + @kstunde).strftime("%H:15"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 15).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 15)}, :class => @klasse %>
 											<% else %>
 												<span style="font-size:12px;">&nbsp;</span>
 											<% end %>
-										</td>
-									</tr>
-									<tr>
-										<td class="inner">
+										</div>
+									</div>
+									<div class="div-row">
+										<div class="div-cell inner">
 											<% if std >= 14 && std <= 19 %>
 												<%= link_to (@ktagdatum + @kstunde).strftime("%H:30"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 30).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 30)}, :class => @klasse %>
 											<% else %>
 												<span style="font-size:12px;">&nbsp;</span>
 											<% end %>
-										</td>
-									</tr>
-									<tr>
-										<td class="inner">
+										</div>
+									</div>
+									<div class="div-row">
+										<div class="div-cell inner">
 											<% if std >= 14 && std <= 19 %>
 												<%= link_to (@ktagdatum + @kstunde).strftime("%H:45"), { :action => "new", :beginn => (@ktagdatum + @kstunde + 60 * 45).to_i, :ende => (@ktagdatum + @kstunde).to_i + 60 * (60 + 45)}, :class => @klasse %>
 											<% else %>
 												<span style="font-size:12px;">&nbsp;</span>
 											<% end %>
-										</td>
-									</tr>
-								</table>
+										</div>
+									</div>
+								</div>
 							</td>
 					<% end %>
 				</tr>

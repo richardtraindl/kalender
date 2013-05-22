@@ -38,17 +38,17 @@
 <h1>Termin</h1>
 
 <%= form_for @termin, :url => { :action => :update, :id => @termin.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day } do |termin| %>
-	<div class="div-table" style="border:1px solid #111111; border-spacing:0px">
+	<div class="div-table edit-termin">
 		<div class="div-row">
-			<div class="div-cell">
+			<div class="div-cell edit-termin">
 				<label>Autor:&nbsp</label>
 			</div>
-			<div class="div-cell">
+			<div class="div-cell edit-termin">
 			  <%= termin.select :autor, options_for_select( TermineController::AUTOREN, @termin.autor  ) %>
 			</div>
 		</div>
 		<div class="div-row">
-			<div class="div-cell">
+			<div class="div-cell edit-termin">
 				<label>Thema:&nbsp</label>
 			</div>
 			<div class="div-cell">
@@ -56,30 +56,30 @@
 			</div>
 		</div>
 		<div class="div-row">
-			<div class="div-cell">
+			<div class="div-cell edit-termin">
 				<label>Zeit:&nbsp</label>
 			</div>
-			<div class="div-cell">
-				<table class="blank">
-					<tr>
-						<td class="blank">
+			<div class="div-cell edit-termin">
+				<div class="div-table">
+					<div class="div-row">
+						<div class="div-cell">
 							<label>Beginn&nbsp</label>
-						</td>
-						<td class="blank">
+						</div>
+						<div class="div-cell">
 							<%= termin.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
-						</td>
-					</tr>
-					<tr>
-						<td class="blank">
+						</div>
+					</div>
+					<div class="div-row">
+						<div class="div-cell">
 							<label>Ende&nbsp</label>
-						</td>
-						<td class="blank">
+						</div>
+						<div class="div-cell">
 							<%= termin.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => @termin.ende.strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => @termin.ende.strftime("%d.%m.%Y"), :size => 10 %>
-						</td>
-					</tr>
-				</table>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

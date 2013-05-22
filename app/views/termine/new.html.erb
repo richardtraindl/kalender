@@ -16,7 +16,6 @@
   	}
   };
 
-
 <% end %>
 
 
@@ -42,65 +41,57 @@
 
 <h1>Termin</h1>
 
-
-
-
-
 <%= form_for @termin, :url => { :action => :create } do |termin| %>
-	<table>
-		<tr>
-			<td>
+	<div class="div-table edit-termin">
+		<div class="div-row">
+			<div class="div-cell edit-termin">
 				<label>Autor:</label>
-			</td>
-			<td>
+			</div>
+			<div class="div-cell edit-termin">
 				<%= termin.select :autor, options_for_select( TermineController::AUTOREN, "Gerold" ) %>
-			</td>
-		</tr>
-		<tr>
-			<td>
+			</div>
+		</div>
+		<div class="div-row">
+			<div class="div-cell edit-termin">
 				<label>Thema:</label>
-			</td>
-			<td>
+			</div>
+			<div class="div-cell edit-termin">
 				<%= termin.text_field :thema, :value => @termin.thema, :size => 50 %>
-			</td>
-		</tr>
-		<tr>
-			<td>
+			</div>
+		</div>
+		<div class="div-row">
+			<div class="div-cell edit-termin">
 				<label>Zeit:</label>
-			</td>
-			<td>
-				<table class="blank">
-					<tr>
-						<td class="blank">
+			</div>
+			<div class="div-cell edit-termin">
+				<div class="div-table">
+					<div class="div-row">
+						<div class="div-cell">
 							<label>Beginn</label>
-						</td>
-						<td class="blank">
+						</div>
+						<div class="div-cell">
 							<%= termin.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
-
-							<!-- %= time_select :termin, :beginn, :default => @termin.beginn, :minute_step => 15 % -->
-							<!-- label --> <!-- am --> <!-- /label -->
-							<!-- %= date_select :termin, :beginn, :default => @termin.beginn, :order => [:day, :month, :year] % -->
-						</td>
-					</tr>
-					<tr>
-						<td class="blank">
+						</div>
+					</div>
+					<div class="div-row">
+						<div class="div-cell">
 							<label>Ende</label>
-						</td>
-						<td class="blank">
+						</div>
+						<div class="div-cell">
 							<%= termin.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => (@termin.beginn + 15.minutes).strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => (@termin.beginn + 15.minutes).strftime("%d.%m.%Y"), :size => 10 %>
-							
-							<!-- %= time_select :termin, :ende, :default => @termin.ende, :minute_step => 15 % -->
-							<!-- label -- > <!-- am --> <!-- /label -->
-							<!-- %= date_select :termin, :ende, :default => @termin.ende, :order => [:day, :month, :year] % -->
-						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>	
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>	
 
-	<p><!-- %= submit_tag("sichern") % -->  <%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>   <%= link_to 'abbrechen', :action => 'index', :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day %></p>
+	<p>
+		<%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>   
+		
+		<%= link_to 'abbrechen', :action => 'index', :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day %>
+	</p>
 <% end %>
 
