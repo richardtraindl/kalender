@@ -31,8 +31,6 @@
 	$(function() {
 		$( ".date-pick" ).datepicker( $.datepicker.regional['de'] ); 
 	});
-
-
 	
 <% end %>
 
@@ -40,63 +38,58 @@
 <h1>Termin</h1>
 
 <%= form_for @termin, :url => { :action => :update, :id => @termin.id, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day } do |termin| %>
-	<table>
-		<tr>
-			<td>
-				<label>Autor:</label>
-			</td>
-			<td>
-			  <%= termin.select :autor, options_for_select( KalenderController::AUTOREN, @termin.autor  ) %>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label>Thema:</label>
-			</td>
-			<td>
+	<div class="div-table" style="border:1px solid #111111; border-spacing:0px">
+		<div class="div-row">
+			<div class="div-cell">
+				<label>Autor:&nbsp</label>
+			</div>
+			<div class="div-cell">
+			  <%= termin.select :autor, options_for_select( TermineController::AUTOREN, @termin.autor  ) %>
+			</div>
+		</div>
+		<div class="div-row">
+			<div class="div-cell">
+				<label>Thema:&nbsp</label>
+			</div>
+			<div class="div-cell">
 				<%= termin.text_field :thema, :value => @termin.thema, :size => 50 %>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<label>Zeit:</label>
-			</td>
-			<td>
+			</div>
+		</div>
+		<div class="div-row">
+			<div class="div-cell">
+				<label>Zeit:&nbsp</label>
+			</div>
+			<div class="div-cell">
 				<table class="blank">
 					<tr>
 						<td class="blank">
-							<label>Beginn</label>
+							<label>Beginn&nbsp</label>
 						</td>
 						<td class="blank">
 							<%= termin.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
-							<!-- %= time_select :termin, :beginn, :default => @termin.beginn, :minute_step => 15 % -->
-							<!-- label --> <!-- am  --> <!-- /label -->
-							<!-- %= date_select :termin, :beginn, :default => @termin.beginn, :order => [:day, :month, :year] % -->
 						</td>
 					</tr>
 					<tr>
 						<td class="blank">
-							<label>Ende</label>
+							<label>Ende&nbsp</label>
 						</td>
 						<td class="blank">
 							<%= termin.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => @termin.ende.strftime("%H:%M"), :size => 5 %>
 							<%= termin.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => @termin.ende.strftime("%d.%m.%Y"), :size => 10 %>
-							
-							<!-- %= time_select :termin, :ende, :default => @termin.ende, :minute_step => 15 % -->
-							<!-- label --> <!-- am  --> <!-- /label -->
-							<!-- %= date_select :termin, :ende, :default => @termin.ende, :order => [:day, :month, :year] % -->
 						</td>
 					</tr>
 				</table>
-			</td>
-		</tr>
-	</table>
-	<p> <!-- %= submit_tag("sichern") % --> <%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>  
+			</div>
+		</div>
+	</div>
+	
+	<p>
+		<%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>
 
 		<%= link_to 'abbrechen', :action => 'index', :Jahr => @kaldatum.year, :Monat => @kaldatum.month, :Tag => @kaldatum.day %>   
 
-		<%= link_to 'löschen', kalender_path(@termin, :kjahr => @kaldatum.year, :kmonat => @kaldatum.month, :ktag => @kaldatum.day ), :method => 'delete', :confirm => "Termin: " + @termin.thema + @termin.beginn.strftime(" %H:%M-") + @termin.ende.strftime("%H:%M ") + "löschen?" %>
+		<%= link_to 'löschen', @termin, :confirm => "Termin: " + @termin.thema + @termin.beginn.strftime(" %H:%M-") + @termin.ende.strftime("%H:%M ") + "löschen?", :method => 'delete' %>
 	</p>
 
 <% end %>

@@ -12,7 +12,7 @@ class Time
 end
 
 
-class KalenderController < ApplicationController
+class TermineController < ApplicationController
     
   AUTOREN = [ "Ordi", "Elfi", "TP" ]
 	SEK_PRO_TAG = (60 * 60 * 24)
@@ -115,14 +115,14 @@ class KalenderController < ApplicationController
 		
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt vor Beginn.'
-      	render :controller => "kalender", :action => "new", :beginn => @termin.beginn, :ende => @termin.ende
+      	render :controller => "termine", :action => "new", :beginn => @termin.beginn, :ende => @termin.ende
 		elsif( @termin.thema.length == 0 )
 		    flash[:error] = 'Eingabe für Thema fehlt.'
-      	render :controller => "kalender", :action => "new", :beginn => @termin.beginn, :ende => @termin.ende		
+      	render :controller => "termine", :action => "new", :beginn => @termin.beginn, :ende => @termin.ende		
 		else
 	    if @termin.save
 	        flash[:notice] = 'Termin erfolgreich gespeichert.'
-	        redirect_to :controller => "kalender", :action => "index", :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day
+	        redirect_to :controller => "termine", :action => "index", :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day
 	    else
 	        flash[:notice] = 'Fehler beim Speichern des Termins.'
 	        render :action => "new"
@@ -162,14 +162,14 @@ class KalenderController < ApplicationController
 
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt Beginn.'
-      	render :controller => "kalender", :action => "edit", :id => @termin.id
+      	render :controller => "termine", :action => "edit", :id => @termin.id
 		elsif( @termin.thema.length == 0 )
 		    flash[:error] = 'Eingabe für Thema fehlt.'
-      	render :controller => "kalender", :action => "edit", :id => @termin.id
+      	render :controller => "termine", :action => "edit", :id => @termin.id
 		else
 		  	if @termin.update_attributes(:autor => @termin.autor, :thema => @termin.thema, :beginn => @termin.beginn, :ende => @termin.ende )
 		        flash[:notice] = 'Termin erfolgreich geändert.'
-		        redirect_to :controller => "kalender", :action => "index", :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day
+		        redirect_to :controller => "termine", :action => "index", :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day
 		    else
 		      	flash[:notice] = 'Fehler beim Speichern des Termins.'
 		        render :action => "edit"
@@ -179,15 +179,17 @@ class KalenderController < ApplicationController
 
 
   def destroy
-    @kaldatum = Time.gm(params[:kjahr].to_i, params[:kmonat].to_i, params[:ktag].to_i)
     @termin = Termin.find(params[:id])
-    
+	jahr = @termin.beginn.year
+	monat = @termin.beginn.month
+	tag = @termin.beginn.day
+	
     if @termin.destroy
 			flash[:notice] = 'Termin erfolgreich gelöscht.'
 		else
 			flash[:notice] = 'Fehler beim Löschen des Termins.'
 		end
-		redirect_to :controller => "kalender", :action => "index", :Jahr => @kaldatum.year, :Monat => @kaldatum.month, :Tag => @kaldatum.day
+		redirect_to :controller => "termine", :action => "index", :Jahr => jahr, :Monat => monat, :Tag => tag
   end
 
 

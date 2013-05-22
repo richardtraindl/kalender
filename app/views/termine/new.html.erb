@@ -22,34 +22,17 @@
 
 <% content_for :ready do %>
 
-
-$("#time_begin").timePicker({
-  	startTime: "00:00",
-  	endTime: "23:45",
-  	show24Hours: true,
-  	separator: ':',
-  	step: 15});
-
-$("#time_end").timePicker({
-  	startTime: "00:00",
-  	endTime: "23:45",
-  	show24Hours: true,
-  	separator: ':',
-  	step: 15});
-
-	$(function() {
-		$.datepicker.setDefaults($.datepicker.regional['']);
-		$( "#date_begin" ).datepicker( $.datepicker.regional['de'] ); 
-		$( "#date_begin" ).datepicker({ nextText: 'Later' });
+	$('.time-pick').timepicker({
+		'timeFormat': 'H:i',
+		'minTime': '00:00',
+		'maxTime': '23:45',
+		'step': 15,		
+		'showDuration': false
 	});
-
+	
 	$(function() {
-		$.datepicker.setDefaults($.datepicker.regional['']);
-		$( "#date_end" ).datepicker( $.datepicker.regional['de'] ); 
-		$( "#date_end" ).datepicker({ nextText: 'Later' });
+		$( ".date-pick" ).datepicker( $.datepicker.regional['de'] ); 
 	});
-
-
 
 <% end %>
 
@@ -70,7 +53,7 @@ $("#time_end").timePicker({
 				<label>Autor:</label>
 			</td>
 			<td>
-				<%= termin.select :autor, options_for_select( KalenderController::AUTOREN, "Gerold" ) %>
+				<%= termin.select :autor, options_for_select( TermineController::AUTOREN, "Gerold" ) %>
 			</td>
 		</tr>
 		<tr>
@@ -92,8 +75,8 @@ $("#time_end").timePicker({
 							<label>Beginn</label>
 						</td>
 						<td class="blank">
-							<%= termin.text_field :time_begin, :id => "time_begin", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
-							<%= termin.text_field :date_begin, :id => "date_begin", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
+							<%= termin.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
+							<%= termin.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
 
 							<!-- %= time_select :termin, :beginn, :default => @termin.beginn, :minute_step => 15 % -->
 							<!-- label --> <!-- am --> <!-- /label -->
@@ -105,8 +88,8 @@ $("#time_end").timePicker({
 							<label>Ende</label>
 						</td>
 						<td class="blank">
-							<%= termin.text_field :time_end, :id => "time_end", :value => (@termin.beginn + 15.minutes).strftime("%H:%M"), :size => 5 %>
-							<%= termin.text_field :date_end, :id => "date_end", :value => (@termin.beginn + 15.minutes).strftime("%d.%m.%Y"), :size => 10 %>
+							<%= termin.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => (@termin.beginn + 15.minutes).strftime("%H:%M"), :size => 5 %>
+							<%= termin.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => (@termin.beginn + 15.minutes).strftime("%d.%m.%Y"), :size => 10 %>
 							
 							<!-- %= time_select :termin, :ende, :default => @termin.ende, :minute_step => 15 % -->
 							<!-- label -- > <!-- am --> <!-- /label -->
