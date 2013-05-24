@@ -77,8 +77,6 @@ class TermineController < ApplicationController
 		@termin				 = Termin.new
 		@termin.beginn = Time.at(Integer(params[:beginn]))
 		@termin.ende   = @termin.beginn + 15.minutes
-
-		@is_edit = false
   end
 
 
@@ -115,8 +113,6 @@ class TermineController < ApplicationController
 	  # @termin.beginn = build_datetime_from_params( params[:termin], "beginn" )
 		# @termin.ende   = build_datetime_from_params( params[:termin], "ende" )
 
-		@is_edit = false
-
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt vor Beginn.'
       	render :action => "new", :beginn => @termin.beginn, :ende => @termin.ende
@@ -138,7 +134,6 @@ class TermineController < ApplicationController
   def edit
   	@kaldatum = Time.gm(params[:kjahr].to_i, params[:kmonat].to_i, params[:ktag].to_i)
 		@termin	= Termin.find(params[:id])
-		@is_edit = true
   end
 
 
@@ -162,8 +157,6 @@ class TermineController < ApplicationController
 												(params[:termin][:time_end].to_s[0,2]).to_i,
 												(params[:termin][:time_end].to_s[3,2]).to_i,
 												0, 0)
-
-		@is_edit = true
 
 		if( @termin.beginn > @termin.ende )
 		    flash[:error] = 'Ende liegt Beginn.'

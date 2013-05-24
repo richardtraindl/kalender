@@ -40,14 +40,14 @@
 
 <h1>Termin</h1>
 
-<%= form_for @termin do |termin| %>
+<%= form_for @termin do |form| %>
 	<div class="div-table edit-termin">
 		<div class="div-row">
 			<div class="div-cell edit-termin">
 				<label>Autor:</label>
 			</div>
 			<div class="div-cell edit-termin">
-				<%= termin.select :autor, options_for_select( TermineController::AUTOREN, "Gerold" ) %>
+				<%= form.select :autor, options_for_select( TermineController::AUTOREN, "Gerold" ) %>
 			</div>
 		</div>
 		<div class="div-row">
@@ -55,7 +55,7 @@
 				<label>Thema:</label>
 			</div>
 			<div class="div-cell edit-termin">
-				<%= termin.text_field :thema, :value => @termin.thema, :size => 50 %>
+				<%= form.text_field :thema, :value => @termin.thema, :size => 50 %>
 			</div>
 		</div>
 		<div class="div-row">
@@ -69,8 +69,8 @@
 							<label>Beginn</label>
 						</div>
 						<div class="div-cell">
-							<%= termin.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
-							<%= termin.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
+							<%= form.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
+							<%= form.text_field :date_begin, :id => "date_begin", :class=> "date-pick", :value => @termin.beginn.strftime("%d.%m.%Y"), :size => 10 %>
 						</div>
 					</div>
 					<div class="div-row">
@@ -78,8 +78,8 @@
 							<label>Ende</label>
 						</div>
 						<div class="div-cell">
-							<%= termin.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => (@termin.ende).strftime("%H:%M"), :size => 5 %>
-							<%= termin.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => (@termin.ende).strftime("%d.%m.%Y"), :size => 10 %>
+							<%= form.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => (@termin.ende).strftime("%H:%M"), :size => 5 %>
+							<%= form.text_field :date_end, :id => "date_end", :class=> "date-pick", :value => (@termin.ende).strftime("%d.%m.%Y"), :size => 10 %>
 						</div>
 					</div>
 				</div>
@@ -88,12 +88,12 @@
 	</div>	
 
 	<p>
-		<%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();' ) %>   
+		<%= submit_tag( "sichern", :id => "sichern", :onclick => 'return checkdate();', :class => 'btn' ) %>   
 
-		<%= link_to 'abbrechen', :action => 'index', :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day %>
+		<%= link_to 'abbrechen', kalender_path( :Jahr => @termin.beginn.year, :Monat => @termin.beginn.month, :Tag => @termin.beginn.day), :class => 'btn' %>
 		
-		<% if @is_edit %>
-			<%= link_to 'löschen', @termin, :confirm => "Termin: " + @termin.thema + @termin.beginn.strftime(" %H:%M-") + @termin.ende.strftime("%H:%M ") + "löschen?", :method => 'delete' %>
+		<% unless @termin.new_record? %>
+			<%= link_to 'löschen', termin_path( @termin ), :confirm => "Termin: " + @termin.thema + @termin.beginn.strftime(" %H:%M-") + @termin.ende.strftime("%H:%M ") + "löschen?", :method => 'delete', :class => 'btn' %>
 		<% end %>
 	</p>
 <% end %>
