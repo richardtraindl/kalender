@@ -35,16 +35,13 @@
 <% end %>
 
 
-<div id='error' style='color: red; border: 2 solid red;'></div>
-
-
 <h1>Termin</h1>
 
 <%= form_for @termin do |form| %>
 	<div class="div-table edit-termin">
 		<div class="div-row">
 			<div class="div-cell edit-termin">
-				<label>Autor:</label>
+				<label>Autor:&nbsp</label>
 			</div>
 			<div class="div-cell edit-termin">
 				<%= form.select :autor, options_for_select( TermineController::AUTOREN, "Gerold" ) %>
@@ -52,7 +49,7 @@
 		</div>
 		<div class="div-row">
 			<div class="div-cell edit-termin">
-				<label>Thema:</label>
+				<label>Thema:&nbsp</label>
 			</div>
 			<div class="div-cell edit-termin">
 				<%= form.text_field :thema, :value => @termin.thema, :size => 50 %>
@@ -60,13 +57,13 @@
 		</div>
 		<div class="div-row">
 			<div class="div-cell edit-termin">
-				<label>Zeit:</label>
+				<label>Zeit:&nbsp</label>
 			</div>
 			<div class="div-cell edit-termin">
 				<div class="div-table">
 					<div class="div-row">
 						<div class="div-cell">
-							<label>Beginn</label>
+							<label>Beginn&nbsp</label>
 						</div>
 						<div class="div-cell">
 							<%= form.text_field :time_begin, :id => "time_begin", :class=> "time-pick", :value => @termin.beginn.strftime("%H:%M"), :size => 5 %>
@@ -75,7 +72,7 @@
 					</div>
 					<div class="div-row">
 						<div class="div-cell">
-							<label>Ende</label>
+							<label>Ende&nbsp</label>
 						</div>
 						<div class="div-cell">
 							<%= form.text_field :time_end, :id => "time_end", :class=> "time-pick", :value => (@termin.ende).strftime("%H:%M"), :size => 5 %>

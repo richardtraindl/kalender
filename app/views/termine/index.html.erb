@@ -141,11 +141,10 @@
 
 <% end %>
 
-
-	<div class="div-table" style="width:100%">
+	<div class="div-table nav">
 		<div class="div-row">
 			<%= form_tag({:action => "index"}, :method=> "get", :id =>"mainform") do %>
-				<div class="div-cell" style="width:20%">
+				<div class="div-cell" style="padding-right:40px;">
 						<label>Jahr:</label>
 						<%= select_tag(:Jahr, options_for_select(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"], @kaldatum.year.to_s), :onchange => 'this.form.submit()' ) %>
 						<label> Monat:</label>
@@ -153,33 +152,30 @@
 						<%= text_field_tag(:Tag, @kaldatum.day.to_i, :size => 1, :type => "hidden") %>
 						<%= text_field_tag(:KWadjust, @kaldatum.to_i, :size => 1, :type => "hidden") %>
 				</div>
-				<div class="div-cell" style="width:10%; text-align:center;">
+				<div class="div-cell" style="padding-right:40px;">
 					<%= "<label>KW: #{@kaldatum.strftime("%W")}</label>".html_safe %>
 				</div>
-				<div class="div-cell" style="width:5%; padding-right: 2px; text-align:right;">						
-					 <%= tag "input", {"type" => "button", "value" => "+", "onclick" => "kwadjust(1)" } %>
+				<div class="div-cell" style="padding-right: 10px">						
+					 <%= tag "input", "type" => "button", "value" => "+", "onclick" => "kwadjust(1)", :class => "btn" %>
 				</div>
-				<div class="div-cell" style="width:5%; padding-left:2px; text-align:left">
-					 <%= tag "input", {"type" => "button", "value" => "-", "onclick" => "kwadjust(-1)" } %>
+				<div class="div-cell">
+					 <%= tag "input", {"type" => "button", "value" => "-", "onclick" => "kwadjust(-1)", :class => "btn" } %>
 				</div>
 			<% end %>
-			
-			<div class="div-cell" style="width:60%; text-align:right">
-				<h2 class="header">
-					<a style="color:red" href="kalender">Tagesdatum:
-						<% if @aktzeit.day < 10 %>
-							<%= "0" + @aktzeit.day.to_s %>.
-						<% else %>
-							<%= @aktzeit.day %>.
-						<% end %>
-						<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= @aktzeit.strftime("%W") %>
-					</a>
-				</h2>
+			<div class="div-cell" style="text-align:right">
+				<a style="color:red;" href="kalender">Tagesdatum:
+					<% if @aktzeit.day < 10 %>
+						<%= "0" + @aktzeit.day.to_s %>.
+					<% else %>
+						<%= @aktzeit.day %>.
+					<% end %>
+					<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= @aktzeit.strftime("%W") %>
+				</a>
 			</div>
 		</div>
 	</div>
 
-	<table style="width:100%" id="cal">
+	<table id="cal">
 		<colgroup>
 			<col width="14%">
 			<col width="14%">
@@ -324,7 +320,7 @@
 				<% if t.beginn.to_datetime.jd < t.ende.to_datetime.jd && 
 					t.beginn.to_datetime.jd != @ugrenze.to_datetime.jd && t.autor != "TP" %>
 						<%= " data-stunde='7' data-viertel='0' data-dauer_viertel='3'>".html_safe %>
-						<p class="termin">
+						<p>
 							<%= t.beginn.strftime("%d.%m %H:%M") %>
 							<br>
 							<%= t.ende.strftime("%d.%m %H:%M") %>

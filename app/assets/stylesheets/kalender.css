@@ -1,33 +1,97 @@
-body { margin-top:10px; margin-right:10px; margin-bottom:10px; margin-left:10px; font-family:'Arial'; font-size:16px;  background-color:white }
-h1 { font-size:24px }
-h2.header { font-size:18px; text-decoration:none; text-align:right; color:red; margin:0 0 0 0; padding:0 0 0 0 }
-p.termin { border:1px solid #111111; margin:0 0 0 0; padding:0 0 0 0 }
+* { 
+	margin:0px;
+	padding:0px;
+	border:0px;
+	font-weight:normal;
+	font-size:14px;
+	font-family:'Arial';
+}
+
+body { 
+	margin:10px 10px 0px 10px; 
+	background-color:white 
+}
+
+h1 {
+	padding-bottom:10px;
+	font-size:18px;
+}
+
+/* p.termin { border:1px solid #111111;} */
+
 table { border:1px solid #111111; border-spacing:0px }
-table.blank { border:0px }
-table.inner { border:0px; table-layout:fixed }
 tr { vertical-align:top }
-tr.woche { height:40px }
 td { border:1px solid #111111; padding:1px 1px 1px 1px; vertical-align:top }
-td.blank { border:0px }
-td.header1 { height:50px; vertical-align:middle; background-color:#E0E0E0 }
-td.header2 { height:50px; vertical-align:middle; background-color:#80A0E0 }
-td.markiert { background-color:#F4E8E8 }
+
+table#cal{
+	width:100%;
+}
+
+td.header1, td.header2 { 
+	height:50px; 
+	vertical-align:middle; 
+}
+
+td.header1 { 
+	background-color:#E0E0E0 
+}
+
+td.header2 { 
+	background-color:#80A0E0 
+}
+
 td.termin { max-height:40px }
-div.inner { border:0px; padding:0 0 0 0; height:15px }
-div.edit-termin { border:1px solid #111111; border-spacing:0px }
+
+div.inner { 
+	border:0px; padding:0 0 0 0; height:15px 
+}
+
 a:link, :visited, :active, :focus, :hover { text-decoration:none; color:black }
 a.stunde1 { font-size:12px; text-decoration:none; color:black }
 a.stunde2 { font-size:12px; text-decoration:none; color:#2948D3; font-weight:bold }
-div.termin { font-size:14px; background-color:#FFB; z-index:9 }
-span.feiertag { color:red }
-.div-table {	display: table; border-collapse: collapse; }
-.div-row {	display: table-row; }
-.div-cell {	display: table-cell;	vertical-align: top; border-color: #CCCCCC; }
 
+div.termin { font-size:14px; background-color:#FFB; z-index:9 }
+
+span.feiertag { 
+	color:red
+}
+
+div.edit-termin { 
+	border:1px solid #111111; 
+	border-spacing:0px;
+}
+
+.div-table {	
+	display:table; 
+	border-collapse:collapse; 
+}
+
+.div-row {	
+	display:table-row; 
+}
+
+.div-cell {	
+	display:table-cell;	
+	vertical-align:top; 
+	border-color:#CCCCCC; 
+}
+
+div.nav { 
+	width:100%;
+}
+
+div.nav div { 
+	vertical-align:middle; 
+	padding-bottom:10px; 
+}
+
+div.nav * {
+	font-size:18px;
+}
 
 .btn {
   display: inline-block;
-  padding: 4px 10px 4px;
+  padding: 2px 5px 2px;
   text-align: center;
   color: #333333;
   background-color: #e6e6e6;
@@ -36,18 +100,29 @@ span.feiertag { color:red }
   background-image: -ms-linear-gradient(top, white 0%, #e6e6e6 100%);
   background-image: -o-linear-gradient(top, white 0%, #e6e6e6 100%);
   background-image: linear-gradient(top, white 0%, #e6e6e6 100%);
-  -webkit-border-radius: 4px;
-  -moz-border-radius: 4px;
-  -ms-border-radius: 4px;
-  -o-border-radius: 4px;
-  border-radius: 4px;
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -ms-border-radius: 2px;
+  -o-border-radius: 2px;
+  border-radius: 2px;
   cursor: pointer;
   border: 1px solid darkgray;
-  white-space: nowrap; }
+  white-space: nowrap; 
+}
   
-  a.btn, a.btn:visited, a.btn:hover {
+a.btn, a.btn:visited, a.btn:hover {
   color: #333333;
-  text-decoration: none; }
-a.btn:hover {
-  background-color: #e6e6e6; }
+  text-decoration: none; 
+}
 
+a.btn:hover {
+  background-color: #e6e6e6; 
+}
+
+.notice {
+	color:green;
+}
+
+.error {
+	color:red;
+}

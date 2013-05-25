@@ -30,9 +30,9 @@
 <body>
 
 <% if flash[:notice] %>
-  <p class="notice" style="color: green"><%= flash[:notice] %></p>
+  <p class="notice"><%= flash[:notice] %></p>
 <% elsif flash[:error] %>
-  <p class="error" style="color: red"><%= flash[:error] %></p>
+  <p class="error"><%= flash[:error] %></p>
 <% end %>
 
 
