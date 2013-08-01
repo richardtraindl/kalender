@@ -96,5 +96,15 @@ module KalenderHelper
 		
 		return false,""
  end
+
+ def calcKW(datum)
+	firstofyear = Time.gm(datum.year, 1, 1, 0, 0, 0, 0)
+
+	if firstofyear.monday? || firstofyear.tuesday? || firstofyear.wednesday?
+		return (datum.strftime("%W").to_i + 1).to_s
+	else
+		return datum.strftime("%W")
+	end
+ end
  
 end

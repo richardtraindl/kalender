@@ -153,7 +153,7 @@
 						<%= text_field_tag(:KWadjust, @kaldatum.to_i, :size => 1, :type => "hidden") %>
 				</div>
 				<div class="div-cell" style="padding-right:40px;">
-					<%= "<label>KW: #{@kaldatum.strftime("%W")}</label>".html_safe %>
+					<%= "<label>KW: #{calcKW(@kaldatum)}</label>".html_safe %>
 				</div>
 				<div class="div-cell" style="padding-right: 10px">						
 					 <%= tag "input", "type" => "button", "value" => "+", "onclick" => "kwadjust(1)", :class => "btn" %>
@@ -169,7 +169,7 @@
 					<% else %>
 						<%= @aktzeit.day %>.
 					<% end %>
-					<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= @aktzeit.strftime("%W") %>
+					<%= @monate[@aktzeit.month - 1][0] %> <%= @aktzeit.year %>, KW: <%= calcKW(@aktzeit) %>
 				</a>
 			</div>
 		</div>
