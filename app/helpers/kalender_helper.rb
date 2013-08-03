@@ -98,13 +98,21 @@ module KalenderHelper
  end
 
  def calcKW(datum)
-	firstofyear = Time.gm(datum.year, 1, 1, 0, 0, 0, 0)
+	@dt = Time.gm(datum.year, datum.month, datum.day)
 
-	if firstofyear.monday? || firstofyear.tuesday? || firstofyear.wednesday?
-		return (datum.strftime("%W").to_i + 1).to_s
-	else
-		return datum.strftime("%W")
-	end
+	# Determine its Day of Week, D
+	# Use that to move to the nearest Thursday (-3..+3 days)
+	@dt += (4 - @dt.wday).days
+
+	# Note the year of that date, Y
+	# Obtain January 1 of that year
+	@firstofyear = Time.gm(@dt.year, 1, 1)
+
+	# Get the Ordinal Date of that Thursday, DDD of YYYY-DDD
+	@diff = @dt.yday - @firstofyear.yday
+
+	# Then W is 1 + (DDD-1) div 7
+	(1 + @diff / 7).to_s
  end
- 
+	
 end
