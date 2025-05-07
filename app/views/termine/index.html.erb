@@ -146,7 +146,7 @@
 			<%= form_tag({:action => "index"}, :method=> "get", :id =>"mainform") do %>
 				<div class="div-cell" style="padding-right:40px;">
 						<label>Jahr:</label>
-						<%= select_tag(:Jahr, options_for_select(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020"], @kaldatum.year.to_s), :onchange => 'this.form.submit()' ) %>
+						<%= select_tag(:Jahr, options_for_select(["2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026", "2027", "2028", "2029"], @kaldatum.year.to_s), :onchange => 'this.form.submit()' ) %>
 						<label> Monat:</label>
 						<%= select_tag(:Monat, options_for_select(@monate, @kaldatum.month.to_s), :onchange => 'this.form.submit()' ) %>
 						<%= text_field_tag(:Tag, @kaldatum.day.to_i, :size => 1, :type => "hidden") %>
