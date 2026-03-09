@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}{% endblock %}</title>
+
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='kalender.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='jquery-ui-1.12.1.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='jquery.timepicker.css') }}">
+
+    <script src="{{ url_for('static', filename='jquery-3.4.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery-ui-1.12.1.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='datepicker-de.js') }}"></script>
+    <script src="{{ url_for('static', filename='jquery.timePicker.js') }}"></script>
+    <script src="{{ url_for('static', filename='platziere_termine.js') }}"></script>
+  </head>
+  <body>
+
+    <div id="content-wrapper">
+
+      <div id="msg">
+        {% for message in get_flashed_messages() %}
+          <div class="flash">{{ message }}</div>
+        {% endfor %}
+      </div>
+
+     {%- if page_title == "Anmelden" or page_title == "Registrieren" -%}
+      <div style="margin: 2em;" id="content">
+     {% else %}
+      <div id="content">
+     {% endif %}  
+
+       {% block content %}{% endblock %}
+      </div>
+
+    </div><!-- content-wrapper ende -->
+
+  </body>
+</html>
+
