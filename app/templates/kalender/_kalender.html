@@ -1,0 +1,182 @@
+
+<div class="search">
+  <form id="mainform" method="post" action="{{ url_for('kalender.index') }}">
+    <div class="kal-nav">
+      <div>
+        <label for="kjahr">Jahr:</label>
+        {% include 'kalender/_select_for_jahre.html' %}
+
+        <label for="kmonat">Monat:</label>
+        {% include 'kalender/_select_for_monate.html' %}
+
+        <input type="hidden" name="ktag" value="{{- kwbeginn.day -}}">
+        <input type="hidden" id="kwadjust" name="kwadjust" value="0">
+      </div>
+
+      <div>
+        <label>KW:&nbsp; {{- kwbeginn|calc_kw -}}</label>
+
+        <input id="kwadd" class="btn" size="5" name="kwadd" value="+">
+
+        <input id="kwsub" class="btn" size="5" name="kwsub" value="-">
+      </div>
+
+      <div style="text-align:right; padding-right: 20px">
+        <a id="aktdatum" style="color:red;" href="{{ url_for('kalender.index') }}">
+          Tagesdatum: &nbsp;
+          {{- aktdatum.strftime("%d.") -}}
+          {{- monate[aktdatum.month - 1][0] -}} &nbsp;
+          {{- aktdatum.strftime("%Y") -}}, KW:&nbsp; {{- aktdatum|calc_kw -}}
+        </a>
+      </div>
+      
+      <div>
+      {% if current_user.is_authenticated %}
+        <a href="{{ url_for('auth.logout') }}">
+          {{- current_user.username -}} &nbsp; abmelden        
+        </a>
+      {% elif page_title != "Anmelden" %}
+        <a href="{{ url_for('auth.login') }}">anmelden</a>
+      {% endif %}
+      </div>
+    </div>
+  </form>
+</div>
+
+  <table>
+    <colgroup>
+      <col width="14%">
+      <col width="14%">
+      <col width="14%">
+      <col width="14%">
+      <col width="14%">
+      <col width="14%">
+      <col width="14%">
+    </colgroup>
+    <tr>
+      {% for tag in range(7) %}
+        {% set tagesdatum = kwbeginn|add_days(tag) %}
+        {% if tagesdatum == aktdatum %}
+          <td class="header2">
+        {% else %}
+          <td class="header1">
+        {% endif %}
+
+        {% if (tagesdatum|feiertag)|length > 0 or tag == 6 %}
+          <span class="feiertag" style="font-size:24px">{{- tagesdatum.day -}}</span>
+          {{- wochentage[tag] -}} &nbsp;
+          <span style="font-size:10px">{{- tagesdatum|feiertag -}}</span>
+        {% else %}
+          <span style="font-size:24px">{{- tagesdatum.day -}}</span>
+          {{- wochentage[tag] -}}
+        {% endif %}
+          </td>
+      {% endfor %}
+    </tr>
+
+  {% for std in range(7, 24) %}
+    {% set stddatum = kwbeginn|add_hours(std) %}
+    {% if std == 22 %}
+      <tr style="height: 60px">
+    {% else %}
+      <tr class="woche">
+    {% endif %}
+
+    {% for tag in range(7) %}
+      {% set stddatum = stddatum|add_days(tag) %}
+      {% set klasse = "stunde1" %}
+
+      <td id={{- stddatum.strftime("c%d_%H") -}}>
+        <div class="kal-stunde">
+          <a class="{{- klasse -}}" href="{{ url_for('kalender.create', beginn=stddatum.strftime('%Y-%m-%d %H:%M:00')) }}">
+           {{- stddatum.strftime("%H:%M") -}}
+          </a>
+          {% set klasse = "stunde1" %}
+        </div>
+
+        {% for min in range(15, 60, 15) %}
+          {% set mindatum = stddatum|add_mins(min) %}
+
+          <div class="kal-viertel">
+          {% if std >= 14 and std <= 19 and min == 30 %}
+            <a class="{{- klasse -}}" href="{{ url_for('kalender.create', beginn=mindatum.strftime('%Y-%m-%d %H:%M:00')) }}">
+              {{- mindatum.strftime("%H:%M") -}}
+            </a>
+          {% endif %}
+          </div>
+        {% endfor %}
+      </td>
+    {% endfor %}
+    </tr>
+  {% endfor %}
+  </table>
+
+  <!-- Für jeden Wochentag und Termin einen DIV Block schreiben -->
+  {% for ktermin in ktermine %}
+    <div class="termin" data-autor="{{- ktermin.termin.autor -}}" data-wtag="{{- ktermin.tag -}}" 
+      data-stunde="{{- ktermin.stunde -}}" data-viertel="{{- ktermin.viertel -}}" data-dauer_viertel="{{- ktermin.dauer_viertel -}}">
+      {% if ktermin.termin.beginn.day == ktermin.termin.ende.day %}
+        <a class="termin" href="{{- url_for('kalender.edit', id=ktermin.termin.id) -}}">
+          {{- ktermin.termin.thema -}} &nbsp;
+          {{- ktermin.termin.beginn.strftime("%H:%M") + " bis " + ktermin.termin.ende.strftime("%H:%M") -}}
+        </a>
+      {% else %}
+        <a class="termin" href="{{- url_for('kalender.edit', id=ktermin.termin.id) -}}">
+          {{- ktermin.termin.thema -}} &nbsp;
+          {{- ktermin.termin.beginn.strftime("%Y-%m-%d, %H:%M") + " bis " + ktermin.termin.ende.strftime("%Y-%m-%d, %H:%M") -}}
+        </a>
+      {% endif %}
+    </div>
+  {% endfor %}
+
+  <div id="pop-up">
+     <p>This div only appears when the trigger link is hovered over. Otherwise it is hidden from view.</p>
+  </div>
+
+  <script>
+    function handle_mouseover(){
+      var moveLeft = 20;
+      var moveDown = 10;
+
+      $('div.termin').hover(function(e){
+        var txt = $(this).find("a").text();
+        $('div#pop-up').find("p").text(txt);
+        $('div#pop-up').show();
+      }, function(){
+        $('div#pop-up').hide();
+      });
+
+      $('div.termin').mousemove(function(e) {
+        $("div#pop-up").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+      });
+    }
+
+    $(document).ready(function() {
+      platziere_termine(100, 50);
+
+      handle_mouseover();
+
+      $(window).resize(platziere_termine);
+
+      $("#kjahr").change(function() {
+        $("#mainform").submit();
+      });
+
+      $("#kmonat").change(function() {
+        $("#mainform").submit();
+      });
+
+      $("#kwadd").click(function() {
+        $("#kwadjust").val(1);
+
+        $("#mainform").submit();
+      });
+
+      $("#kwsub").click(function() {
+        $("#kwadjust").val(-1);
+
+        $("#mainform").submit();
+      });
+
+    });
+  </script>

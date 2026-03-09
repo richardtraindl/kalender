@@ -1,0 +1,10 @@
+
+  <select name="autor" id="autor">
+    {%- for aut in autoren -%}
+      {%- if aut == autor -%}
+        <option value="{{- aut -}}" selected>{{- aut -}}</option>
+      {%- else -%}
+        <option value="{{- aut -}}">{{- aut -}}</option>
+      {%- endif -%}
+    {%- endfor -%}
+  </select>

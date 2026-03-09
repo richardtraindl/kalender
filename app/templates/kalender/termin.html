@@ -1,0 +1,80 @@
+
+{% extends 'base.html' %}
+
+
+{% block title %}
+  Termin
+{% endblock %}
+
+
+{% block content %}
+  {% include 'kalender/_termin.html' %}
+
+  <script>
+    var timep = new RegExp("\\b[012][0-9]:[0-5][0-9]\\b");
+    var datep = new RegExp("\\b[0-9]{4}\\-[01][0-9]\\-[0123][0-9]\\b");
+   
+    function checkdate(){
+      if(timep.test($("#time_begin").val()) && datep.test($("#date_begin").val()) &&
+         timep.test($("#time_end").val()) && datep.test($("#date_end").val()) ){
+        return true;
+      }
+      else{
+        $( '#error' ).empty();
+        $( '#error' ).html( "Falsches Datumsformat: erwartet <i>hh:mm</i> <br> TT:MM:JJJJ z.B. 10:35 01.09.2011" );
+        return false;
+      }
+    };
+
+    $(document).ready(function() {
+      $('.time-pick').timepicker({
+        'timeFormat': 'H:i',
+        'minTime': '00:00',
+        'maxTime': '23:45',
+        'step': 15,
+        'showDuration': false
+      });
+
+      $.datepicker.setDefaults($.datepicker.regional["de"]);
+      $(".date-pick").datepicker({ 
+        dateFormat: "yy-mm-dd",
+        changeMonth: true,
+        changeYear: true,
+        /*onSelect: function(){
+          if($("#autor option:selected").val() != "TP"){
+            if($(this).attr("id") == "date_begin"){
+              var begin = $(this).val();
+              $('#date_end').val(begin);
+            }
+            if($(this).attr("id") == "date_end"){
+              var end = $(this).val();
+              $('#date_begin').val(end);
+            }
+          }
+        }*/
+      });
+        
+      $(".stunde1").click(function(){ 
+        var beginn = $(this).attr("beginn");
+        date_begin = beginn.substring(0, 11);
+        time_begin = beginn.substring(11, 16);
+        $("#date_begin").val(date_begin);
+        $("#time_begin").val(time_begin);
+        $("#date_end").val(date_begin);
+        $("#time_end").val(time_begin);
+      });
+
+      $(".stunde2").click(function(){ 
+        var beginn = $(this).attr("beginn");
+        date_begin = beginn.substring(0, 11);
+        time_begin = beginn.substring(11, 16);
+        $("#date_begin").val(date_begin);
+        $("#time_begin").val(time_begin);
+        $("#date_end").val(date_begin);
+        $("#time_end").val(time_begin);
+      });
+
+    })
+  </script>
+
+{% endblock %}
