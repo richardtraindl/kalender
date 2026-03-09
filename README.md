@@ -1,2 +1,2 @@
 # kalender
-Kalender webapp geschrieben in python Flask
+Flask application for a higly customized calendar
