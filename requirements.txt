@@ -1,0 +1,6 @@
+"flask"
+"werkzeug"
+flask_login
+flask_sqlalchemy
+flask_migrate
+python-dotenv-1.0.1
