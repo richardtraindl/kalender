@@ -1,0 +1,26 @@
+
+{% extends 'base.html' %}
+
+
+{% block title %}
+  {{- page_title -}}
+{% endblock %}
+
+
+{% block content %}
+  <form method="post">
+    <div class="row-grid" style="grid-template-columns: auto auto;">
+      <p><label for="username">Username</label></p>
+      <p><input type="text" name="username" id="username" size="12" required></p>
+
+      <p><label for="password">Password</label></p>
+      <p><input type="password" name="password" id="password" size="12" required></p>
+    </div>
+
+    <div class="small-gap"></div>
+
+    <div>
+      <input type="submit" value="anmelden">
+    </div>
+  </form>
+{% endblock %}
