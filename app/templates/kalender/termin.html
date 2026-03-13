@@ -8,73 +8,157 @@
 
 
 {% block content %}
-  {% include 'kalender/_termin.html' %}
 
-  <script>
-    var timep = new RegExp("\\b[012][0-9]:[0-5][0-9]\\b");
-    var datep = new RegExp("\\b[0-9]{4}\\-[01][0-9]\\-[0123][0-9]\\b");
-   
-    function checkdate(){
-      if(timep.test($("#time_begin").val()) && datep.test($("#date_begin").val()) &&
-         timep.test($("#time_end").val()) && datep.test($("#date_end").val()) ){
-        return true;
-      }
-      else{
-        $( '#error' ).empty();
-        $( '#error' ).html( "Falsches Datumsformat: erwartet <i>hh:mm</i> <br> TT:MM:JJJJ z.B. 10:35 01.09.2011" );
-        return false;
-      }
-    };
+  {% if termin and termin.id %}
+    <h2>Kalender - Termin ändern</h2>
 
-    $(document).ready(function() {
-      $('.time-pick').timepicker({
-        'timeFormat': 'H:i',
-        'minTime': '00:00',
-        'maxTime': '23:45',
-        'step': 15,
-        'showDuration': false
-      });
+    <div class="small-gap"></div>
 
-      $.datepicker.setDefaults($.datepicker.regional["de"]);
-      $(".date-pick").datepicker({ 
-        dateFormat: "yy-mm-dd",
-        changeMonth: true,
-        changeYear: true,
-        /*onSelect: function(){
-          if($("#autor option:selected").val() != "TP"){
-            if($(this).attr("id") == "date_begin"){
-              var begin = $(this).val();
-              $('#date_end').val(begin);
+    <form id="terminform" method="post" action="{{ url_for('kalender.edit', id=termin.id) }}">
+  {% else %}
+    <h2>Kalender - Neuer Termin</h2>
+
+    <div class="small-gap"></div>
+
+    <form id="terminform" method="post" action="{{ url_for('kalender.create') }}">
+  {% endif %}
+
+      <div style="display: grid; grid-template-columns: min-content min-content;">
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <label for="autor">Autor:</label>
+          </p>
+        </div>
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+          {% if termin %}
+            {% set autor = termin.autor %}
+          {% else %}
+            {% set autor = request.form['autor'] %}
+          {% endif %}
+
+          {% include 'kalender/_select_for_autoren.html' %}
+          </p>
+        </div>
+
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <label for="thema">Thema:</label>
+          </p>
+        </div>
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <input name="thema" size="50" value="{{- request.form['thema'] or termin.thema -}}">
+          </p>
+        </div>
+
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <label for="beginn">Beginn:</label>
+          </p>
+        </div>
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <input name="time_begin" size="5" id="time_begin" class="time-pick" value="{{- request.form['time_begin'] or termin.beginn.strftime('%H:%M') -}}">
+            <input name="date_begin" size="10" id="date_begin" class="date-pick" value="{{- request.form['date_begin'] or termin.beginn.strftime('%Y-%m-%d') -}}">
+          </p>
+        </div>
+
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <label for="ende">Ende:</label>
+          </p>
+        </div>
+        <div style="border: 1px solid #111111; border-spacing: 0px;">
+          <p><!-- div class="edit-termin" -->
+            <input name="time_end" size="5" id="time_end" class="time-pick" value="{{- request.form['time_end'] or termin.ende.strftime('%H:%M') -}}">
+            <input name="date_end" size="10" id="date_end" class="date-pick" value="{{- request.form['date_end'] or termin.ende.strftime('%Y-%m-%d') -}}">
+          </p>
+        </div>
+      </div>
+
+      <div class="gap"></div>
+
+      <div class="flex-container">
+        <p><input type="submit" id="sichern" class="btn" style="font-size: 16px; line-height: 18px;" value="sichern" onclick="return checkdate();"></p>
+
+        {% if termin %}
+           <p><a class="btn" href="{{ url_for('kalender.index', kwbeginn=termin.beginn.strftime('%Y-%m-%d %H:%M:00')) }}">abbrechen</a></p>
+        {% else %}
+           <p><a class="btn" href="{{ url_for('kalender.index', kwbeginn=kwbeginn) }}">abbrechen</a></p>
+        {% endif %}
+
+        {% if termin.id %}
+          <p><a class="btn" href="{{ url_for('kalender.delete', id=termin.id) }}" onclick="return confirm('Soll Termin gelöscht werden?')">löschen</a></p>
+        {% endif %}
+      </div>
+    </form>
+
+    <script>
+      var timep = new RegExp("\\b[012][0-9]:[0-5][0-9]\\b");
+      var datep = new RegExp("\\b[0-9]{4}\\-[01][0-9]\\-[0123][0-9]\\b");
+     
+      function checkdate(){
+        if(timep.test($("#time_begin").val()) && datep.test($("#date_begin").val()) &&
+           timep.test($("#time_end").val()) && datep.test($("#date_end").val()) ){
+          return true;
+        }
+        else{
+          $( '#error' ).empty();
+          $( '#error' ).html( "Falsches Datumsformat: erwartet <i>hh:mm</i> <br> TT:MM:JJJJ z.B. 10:35 01.09.2011" );
+          return false;
+        }
+      };
+
+      $(document).ready(function() {
+        $('.time-pick').timepicker({
+          'timeFormat': 'H:i',
+          'minTime': '00:00',
+          'maxTime': '23:45',
+          'step': 15,
+          'showDuration': false
+        });
+
+        $.datepicker.setDefaults($.datepicker.regional["de"]);
+        $(".date-pick").datepicker({ 
+          dateFormat: "yy-mm-dd",
+          changeMonth: true,
+          changeYear: true,
+          /*onSelect: function(){
+            if($("#autor option:selected").val() != "TP"){
+              if($(this).attr("id") == "date_begin"){
+                var begin = $(this).val();
+                $('#date_end').val(begin);
+              }
+              if($(this).attr("id") == "date_end"){
+                var end = $(this).val();
+                $('#date_begin').val(end);
+              }
             }
-            if($(this).attr("id") == "date_end"){
-              var end = $(this).val();
-              $('#date_begin').val(end);
-            }
-          }
-        }*/
-      });
-        
-      $(".stunde1").click(function(){ 
-        var beginn = $(this).attr("beginn");
-        date_begin = beginn.substring(0, 11);
-        time_begin = beginn.substring(11, 16);
-        $("#date_begin").val(date_begin);
-        $("#time_begin").val(time_begin);
-        $("#date_end").val(date_begin);
-        $("#time_end").val(time_begin);
-      });
+          }*/
+        });
+          
+        $(".stunde1").click(function(){ 
+          var beginn = $(this).attr("beginn");
+          date_begin = beginn.substring(0, 11);
+          time_begin = beginn.substring(11, 16);
+          $("#date_begin").val(date_begin);
+          $("#time_begin").val(time_begin);
+          $("#date_end").val(date_begin);
+          $("#time_end").val(time_begin);
+        });
 
-      $(".stunde2").click(function(){ 
-        var beginn = $(this).attr("beginn");
-        date_begin = beginn.substring(0, 11);
-        time_begin = beginn.substring(11, 16);
-        $("#date_begin").val(date_begin);
-        $("#time_begin").val(time_begin);
-        $("#date_end").val(date_begin);
-        $("#time_end").val(time_begin);
-      });
+        $(".stunde2").click(function(){ 
+          var beginn = $(this).attr("beginn");
+          date_begin = beginn.substring(0, 11);
+          time_begin = beginn.substring(11, 16);
+          $("#date_begin").val(date_begin);
+          $("#time_begin").val(time_begin);
+          $("#date_end").val(date_begin);
+          $("#time_end").val(time_begin);
+        });
 
-    })
-  </script>
+      })
+    </script>
 
 {% endblock %}

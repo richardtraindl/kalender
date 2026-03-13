@@ -20,24 +20,20 @@
   </head>
   <body>
 
-    <div id="content-wrapper">
+    <div id="msg">
+      {% for message in get_flashed_messages() %}
+        <div class="flash">{{ message }}</div>
+      {% endfor %}
+    </div>
 
-      <div id="msg">
-        {% for message in get_flashed_messages() %}
-          <div class="flash">{{ message }}</div>
-        {% endfor %}
-      </div>
+   {%- if page_title == "Termin" or page_title == "Anmelden" or page_title == "Registrieren" -%}
+    <div id="content-auth">
+   {% else %}
+    <div id="content">
+   {% endif %}  
 
-     {%- if page_title == "Anmelden" or page_title == "Registrieren" -%}
-      <div style="margin: 2em;" id="content">
-     {% else %}
-      <div id="content">
-     {% endif %}  
-
-       {% block content %}{% endblock %}
-      </div>
-
-    </div><!-- content-wrapper ende -->
+     {% block content %}{% endblock %}
+    </div>
 
   </body>
 </html>

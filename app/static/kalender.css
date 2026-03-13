@@ -17,12 +17,18 @@
 
 body { margin: 0 0.5em; padding: 0 0.5em; background-color: White; }
 h1, h1 a { margin: auto 0; padding: 0; font-size: 1.8em; }
-h2, h2 a { margin: auto 0; padding: 0; font-size: 1.5em; text-decoration: underline; }
+h2, h2 a { margin: auto 0; padding: 0; font-size: 1.5em; } /* text-decoration: underline; */
 h3, h3 a { margin: auto 0; padding: 0; font-size: 1.3em; }
 p, label, input { margin: auto 0; padding: 0; }
 a { color: #377BA8; text-decoration: none; }
 
 .flash { margin: 0.7em 0; padding: 0.5em; background-color: OrangeRed; border: 0.1em solid #377BA8; }
+
+#content-auth {
+  margin: 1em 0 0 0;
+  padding: 1em;  
+  background-color: #EEE;
+}
 
 .row-grid { 
   display: inline-grid; 
@@ -98,7 +104,7 @@ div.termin { font-size: 14px; background-color: #FFB; }
 .kal-nav div { vertical-align: middle; padding: 6px 0; }
 .kal-nav * { font-size: 18px; }
 
-#terminform { padding: 1em 0 0 0; } 
+#terminform { padding: 1em 0 0 0;} 
 
 .notice { color: Green; }
 .error { color: Red; }

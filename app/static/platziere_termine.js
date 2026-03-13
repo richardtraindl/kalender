@@ -112,7 +112,7 @@
             'width' : vwidth + 'px',
             'height' : vheight + 'px',
             'top' : (caltd.offset().top + ((60 / 4) * Number(dviertel)) + vtop) + 'px',
-            'left' : (caltd.offset().left + 20 * vstageleft) + 'px',
+            'left' : (caltd.offset().left + 20 * (vstageleft + 1)) + 'px',
             'overflow' : 'hidden'
         }
 
