@@ -20,17 +20,17 @@
 
     <div class="small-gap"></div>
 
-    <form id="terminform" method="post" action="{{ url_for('kalender.create') }}">
+    <form id="termin-form" method="post" action="{{ url_for('kalender.create') }}">
   {% endif %}
 
-      <div style="display: grid; grid-template-columns: min-content min-content;">
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+      <div class="termin-grid">
+        <div>
+          <p>
             <label for="autor">Autor:</label>
           </p>
         </div>
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
           {% if termin %}
             {% set autor = termin.autor %}
           {% else %}
@@ -41,36 +41,36 @@
           </p>
         </div>
 
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <label for="thema">Thema:</label>
           </p>
         </div>
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <input name="thema" size="50" value="{{- request.form['thema'] or termin.thema -}}">
           </p>
         </div>
 
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <label for="beginn">Beginn:</label>
           </p>
         </div>
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <input name="time_begin" size="5" id="time_begin" class="time-pick" value="{{- request.form['time_begin'] or termin.beginn.strftime('%H:%M') -}}">
             <input name="date_begin" size="10" id="date_begin" class="date-pick" value="{{- request.form['date_begin'] or termin.beginn.strftime('%Y-%m-%d') -}}">
           </p>
         </div>
 
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <label for="ende">Ende:</label>
           </p>
         </div>
-        <div style="border: 1px solid #111111; border-spacing: 0px;">
-          <p><!-- div class="edit-termin" -->
+        <div>
+          <p>
             <input name="time_end" size="5" id="time_end" class="time-pick" value="{{- request.form['time_end'] or termin.ende.strftime('%H:%M') -}}">
             <input name="date_end" size="10" id="date_end" class="date-pick" value="{{- request.form['date_end'] or termin.ende.strftime('%Y-%m-%d') -}}">
           </p>

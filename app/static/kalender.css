@@ -104,7 +104,15 @@ div.termin { font-size: 14px; background-color: #FFB; }
 .kal-nav div { vertical-align: middle; padding: 6px 0; }
 .kal-nav * { font-size: 18px; }
 
-#terminform { padding: 1em 0 0 0;} 
+#termin-form { padding: 1em 0 0 0;} 
+
+.termin-grid { 
+  display: grid; 
+  grid-template-columns: min-content min-content;
+}
+.termin-grid > div{ 
+  border: 1px solid #111111; border-spacing: 0px;
+}
 
 .notice { color: Green; }
 .error { color: Red; }
